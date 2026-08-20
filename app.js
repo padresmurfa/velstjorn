@@ -34,138 +34,6 @@
     return JSON.parse(new TextDecoder().decode(plain));
   }
 
-  /* ---------- rendering ---------- */
-
-  const PRIO = { 0: '0', 1: '+2', 2: '+4', 3: '+6+' };
-  const courseRow = ([code, title, meta, warn, ein, add, cost]) => `
-    <div class="course${add ? ' add' : ''}">
-      ${cost !== undefined ? `<span class="prio p${cost}">${PRIO[cost]}</span>` : ''}
-      <span class="code">${esc(code)}</span>
-      <span class="title-is">${esc(title)}</span>
-      <span class="meta${warn ? ' warn' : ''}">${esc(meta)}</span>
-      <span class="ein">${ein}</span>
-    </div>`;
-  const spGroup = (courses, n) => {
-    const g = courses.filter((c) => (c[7] ?? 1) === n);
-    if (!g.length) return '';
-    const ein = g.reduce((a, c) => a + c[4], 0);
-    return `<div class="spgroup"><span>Spönn ${n} · proposed</span><span>${ein} ein</span></div>` +
-           g.map(courseRow).join('');
-  };
-
-  const term = (t) => `
-    <article class="term${t.mod ? ' ' + t.mod : ''}">
-      <div class="term-rail">
-        <span class="term-no">${esc(t.no)}</span>
-        <span class="term-name">${esc(t.name)}</span>
-        <span class="term-ein">${esc(t.ein)}</span>
-        ${t.tag ? `<span class="tag ${t.tag[0]}">${esc(t.tag[1])}</span>` : ''}
-      </div>
-      <div class="courses">${t.courses.some((c) => c[7] !== undefined)
-        ? spGroup(t.courses, 1) + spGroup(t.courses, 2)
-        : t.courses.map(courseRow).join('')}</div>
-    </article>`;
-
-  const milestone = (m) => `
-    <div class="milestone">
-      <span class="ms-mark">Milestone</span>
-      <span class="ms-text">${m.text}</span>
-      <span class="ms-why">${esc(m.why)}</span>
-    </div>`;
-
-  const chain = (c) => `
-    <div class="chain">
-      <span class="chain-name">${esc(c.name)}</span>
-      <span class="chain-links">${c.links
-        .map(([t, locked]) => `<span class="lk${locked ? ' locked' : ''}">${esc(t)}</span>`)
-        .join('<span class="arrow">&rarr;</span>')}</span>
-      <span class="chain-note">${esc(c.note)}</span>
-    </div>`;
-
-  const loadBar = (v, past) =>
-    `<span class="load-track"><span class="load-fill${past ? ' past' : ''}" style="width:${(v / 20) * 100}%"></span></span><span class="load-val">${v}</span>`;
-  const loadRow = ([label, a, b, past]) => `
-    <div class="load-row">
-      <span class="load-label">${esc(label)}</span>
-      ${loadBar(a, past)}${loadBar(b, past)}
-    </div>`;
-
-  function render(d) {
-    document.title = d.title;
-    app.replaceChildren(el(`
-      <header class="mast">
-        <p class="eyebrow">${esc(d.eyebrow)}</p>
-        <h1>${esc(d.title)}</h1>
-        <p class="standfirst">${esc(d.standfirst)}</p>
-        <dl class="facts">${d.facts
-          .map(([k, v]) => `<div class="fact"><dt>${esc(k)}</dt><dd>${v}</dd></div>`).join('')}</dl>
-      </header>
-
-      <section>
-        <h2>${esc(d.constraint.heading)}</h2>
-        <p class="sec-lede">${d.constraint.lede}</p>
-        <div class="chains">${d.constraint.chains.map(chain).join('')}</div>
-        <div class="callout">${d.constraint.callout}</div>
-      </section>
-
-      <section>
-        <h2>Term by term</h2>
-        ${d.spineNote ? `<p class="sec-lede">${d.spineNote}</p>` : ''}
-        <div class="spine">${d.spine
-          .map((s) => (s.type === 'term' ? term(s) : milestone(s))).join('')}</div>
-      </section>
-
-      <section>
-        <h2>${esc(d.milestoneTable.heading)}</h2>
-        <div class="scroll">
-          <table>
-            <thead><tr><th>Milestone</th><th>Rights</th><th>Term</th><th>Gated by</th></tr></thead>
-            <tbody>${d.milestoneTable.rows.map(([a, b, c, e]) => `
-              <tr><td class="term-cell">${a}</td><td>${b}</td>
-                  <td class="term-cell">${c}</td><td class="mono">${e}</td></tr>`).join('')}
-            </tbody>
-          </table>
-        </div>
-        <p class="sec-lede">${d.milestoneTable.note}</p>
-      </section>
-
-      <section>
-        <h2>${esc(d.load.heading)}</h2>
-        <p class="sec-lede">${d.load.lede}</p>
-        <div class="load">
-          <div class="load-head"><span></span><span>Spönn 1</span><span></span><span>Spönn 2</span><span></span></div>
-          ${d.load.rows.map(loadRow).join('')}</div>
-        <ul class="plain">${d.load.valves.map((v) => `<li>${v}</li>`).join('')}</ul>
-      </section>
-
-      ${d.contingency ? `
-      <section>
-        <h2>${esc(d.contingency.heading)}</h2>
-        <p class="sec-lede">${d.contingency.lede}</p>
-        <div class="scroll">
-          <table>
-            <thead><tr><th>If this happens</th><th>Vélstjórn C</th><th>Vélstjórn D</th><th>Why</th></tr></thead>
-            <tbody>${d.contingency.rows.map(([t, c, dd, w]) => `
-              <tr><td>${t}</td><td class="term-cell">${c}</td>
-                  <td class="term-cell">${dd}</td><td>${w}</td></tr>`).join('')}
-            </tbody>
-          </table>
-        </div>
-      </section>` : ''}
-
-      <section>
-        <h2>${esc(d.checks.heading)}</h2>
-        <ol class="checks">${d.checks.items.map((c) => `<li>${c}</li>`).join('')}</ol>
-      </section>
-
-      <section>
-        <h2>${esc(d.outside.heading)}</h2>
-        <ul class="plain">${d.outside.items.map((o) => `<li>${o}</li>`).join('')}</ul>
-      </section>
-
-      <footer>${d.footer}</footer>`));
-  }
-
   /* ---------- boot ---------- */
 
   async function boot() {
@@ -187,7 +55,7 @@
     }
 
     try {
-      render(await decrypt(blob, pass));
+      window.PlanRenderer.mount(await decrypt(blob, pass), app);
     } catch {
       status('error', 'That key does not open this plan.',
         'The link may be truncated or out of date. Check it was copied whole, including everything after <code>?key=</code>.');
