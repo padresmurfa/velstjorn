@@ -36,7 +36,7 @@
 
   /* ---------- rendering ---------- */
 
-  const PRIO = { 0: '0', 1: '+1', 2: '+2', 3: '+3+' };
+  const PRIO = { 0: '0', 1: '+2', 2: '+4', 3: '+6+' };
   const courseRow = ([code, title, meta, warn, ein, add, cost]) => `
     <div class="course${add ? ' add' : ''}">
       ${cost !== undefined ? `<span class="prio p${cost}">${PRIO[cost]}</span>` : ''}
@@ -45,6 +45,13 @@
       <span class="meta${warn ? ' warn' : ''}">${esc(meta)}</span>
       <span class="ein">${ein}</span>
     </div>`;
+  const spGroup = (courses, n) => {
+    const g = courses.filter((c) => (c[7] ?? 1) === n);
+    if (!g.length) return '';
+    const ein = g.reduce((a, c) => a + c[4], 0);
+    return `<div class="spgroup"><span>Spönn ${n} · proposed</span><span>${ein} ein</span></div>` +
+           g.map(courseRow).join('');
+  };
 
   const term = (t) => `
     <article class="term${t.mod ? ' ' + t.mod : ''}">
@@ -54,7 +61,9 @@
         <span class="term-ein">${esc(t.ein)}</span>
         ${t.tag ? `<span class="tag ${t.tag[0]}">${esc(t.tag[1])}</span>` : ''}
       </div>
-      <div class="courses">${t.courses.map(courseRow).join('')}</div>
+      <div class="courses">${t.courses.some((c) => c[7] !== undefined)
+        ? spGroup(t.courses, 1) + spGroup(t.courses, 2)
+        : t.courses.map(courseRow).join('')}</div>
     </article>`;
 
   const milestone = (m) => `

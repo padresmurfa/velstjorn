@@ -334,6 +334,23 @@ h2 {
 }
 
 
+
+.spgroup {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 20px 4px;
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  border-top: 1px solid var(--line);
+}
+.courses > .spgroup:first-child { border-top: none; }
+.spgroup + .course { border-top: none; }
+
 /* ---------- priority chips ---------- */
 .prio {
   font-family: var(--f-mono);
