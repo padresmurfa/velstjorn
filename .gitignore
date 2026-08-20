@@ -1,0 +1,4 @@
+# The plaintext payload must never be committed to a public repository.
+plan-data.json
+*.plain.json
+.DS_Store
