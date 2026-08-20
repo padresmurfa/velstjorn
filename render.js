@@ -123,6 +123,16 @@ window.PlanRenderer = (() => {
       ${loadBar(a, past)}${loadBar(b, past)}
     </div>`;
 
+  const checkAssume = (id) => {
+    const on = state[id];
+    return `
+    <label class="check-assume">
+      <input type="checkbox" ${on ? 'checked' : ''} data-assume="${id}">
+      <span class="assume-state ${on ? 'yes' : 'no'}">Assumed: ${on ? 'YES' : 'NO'}</span>
+      <span class="check-assume-hint">this report renders the ${on ? 'YES' : 'NO'} branch — toggle to switch</span>
+    </label>`;
+  };
+
   const assumeRow = (item) => {
     const on = state[item.id];
     return `
@@ -215,7 +225,10 @@ window.PlanRenderer = (() => {
 
       <section>
         <h2>${esc(d.checks.heading)}</h2>
-        <ol class="checks">${d.checks.items.map((c) => `<li>${c}</li>`).join('')}</ol>
+        <ol class="checks">${d.checks.items.map((c) => {
+          const html = c.html || c;
+          return `<li>${html}${c.assume ? checkAssume(c.assume) : ''}</li>`;
+        }).join('')}</ol>
       </section>
 
       <section>
