@@ -123,6 +123,21 @@
         <ul class="plain">${d.load.valves.map((v) => `<li>${v}</li>`).join('')}</ul>
       </section>
 
+      ${d.contingency ? `
+      <section>
+        <h2>${esc(d.contingency.heading)}</h2>
+        <p class="sec-lede">${d.contingency.lede}</p>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>If this happens</th><th>Vélstjórn C</th><th>Vélstjórn D</th><th>Why</th></tr></thead>
+            <tbody>${d.contingency.rows.map(([t, c, dd, w]) => `
+              <tr><td>${t}</td><td class="term-cell">${c}</td>
+                  <td class="term-cell">${dd}</td><td>${w}</td></tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </section>` : ''}
+
       <section>
         <h2>${esc(d.checks.heading)}</h2>
         <ol class="checks">${d.checks.items.map((c) => `<li>${c}</li>`).join('')}</ol>
