@@ -82,11 +82,12 @@
       <span class="chain-note">${esc(c.note)}</span>
     </div>`;
 
-  const loadRow = ([label, val, past]) => `
+  const loadBar = (v, past) =>
+    `<span class="load-track"><span class="load-fill${past ? ' past' : ''}" style="width:${(v / 20) * 100}%"></span></span><span class="load-val">${v}</span>`;
+  const loadRow = ([label, a, b, past]) => `
     <div class="load-row">
       <span class="load-label">${esc(label)}</span>
-      <span class="load-track"><span class="load-fill${past ? ' past' : ''}" style="width:${(val / 40) * 100}%"></span></span>
-      <span class="load-val">${val}</span>
+      ${loadBar(a, past)}${loadBar(b, past)}
     </div>`;
 
   function render(d) {
@@ -131,7 +132,9 @@
       <section>
         <h2>${esc(d.load.heading)}</h2>
         <p class="sec-lede">${d.load.lede}</p>
-        <div class="load">${d.load.rows.map(loadRow).join('')}</div>
+        <div class="load">
+          <div class="load-head"><span></span><span>Spönn 1</span><span></span><span>Spönn 2</span><span></span></div>
+          ${d.load.rows.map(loadRow).join('')}</div>
         <ul class="plain">${d.load.valves.map((v) => `<li>${v}</li>`).join('')}</ul>
       </section>
 

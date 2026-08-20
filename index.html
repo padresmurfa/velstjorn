@@ -425,9 +425,21 @@ td.mono { font-family: var(--f-mono); font-size: 12.5px; color: var(--ink-soft);
 /* ---------- load bars ---------- */
 
 .load { display: flex; flex-direction: column; gap: 2px; margin: 28px 0 0; }
+.load-head {
+  display: grid;
+  grid-template-columns: 132px 1fr 44px 1fr 44px;
+  gap: 16px;
+  padding: 0 0 6px;
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
 .load-row {
   display: grid;
-  grid-template-columns: 132px 1fr 58px;
+  grid-template-columns: 132px 1fr 44px 1fr 44px;
   gap: 16px;
   align-items: center;
   padding: 7px 0;
@@ -516,7 +528,7 @@ footer {
   .course { grid-template-columns: 40px 1fr auto; gap: 4px 12px; }
   .course .title-is { grid-column: 1 / -1; }
   .meta { text-align: left; grid-column: 1 / -1; }
-  .load-row { grid-template-columns: 96px 1fr 48px; }
+  .load-row, .load-head { grid-template-columns: 84px 1fr 34px 1fr 34px; gap: 8px; }
   .chain-note { margin-left: 0; }
 }
 
