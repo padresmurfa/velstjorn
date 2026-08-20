@@ -28,7 +28,9 @@ does both.
 
 ## Rebuilding
 
-The plaintext payload is deliberately kept outside this repository.
+The plaintext payload is deliberately kept outside this repository — it lives in the private
+companion repo `padresmurfa/velstjorn-source`, along with the source curricula, the analysis
+documents, and a validator that checks the plan is internally consistent before it ships.
 
 ```
 PLAN_KEY='…' node build.js ../plan/plan-data.json data.enc.json
