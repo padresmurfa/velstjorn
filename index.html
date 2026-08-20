@@ -42,6 +42,10 @@
   --good:        #2C6A4E;
   --good-wash:   #DFEDE4;
 
+  --p0-bg: #E6EDE7; --p0-fg: #39584A;
+  --p1-bg: #F6E8CF; --p1-fg: #7A5A14;
+  --p2-bg: #F6E4DA; --p2-fg: #8F350F;
+  --p3-bg: #F4DAD6; --p3-fg: #7E1D1D;
   --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
   --f-body:    "Source Serif 4", Georgia, "Times New Roman", serif;
   --f-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -62,6 +66,10 @@
     --accent-wash: #351F16;
     --deep:        #9DC3BC;
     --deep-ink:    #0E1615;
+    --p0-bg: #16281F; --p0-fg: #74C39A;
+    --p1-bg: #2E2513; --p1-fg: #D9A84E;
+    --p2-bg: #351F16; --p2-fg: #F0906A;
+    --p3-bg: #351616; --p3-fg: #E57373;
     --good:        #74C39A;
     --good-wash:   #16281F;
   }
@@ -81,6 +89,10 @@
   --accent-wash: #351F16;
   --deep:        #9DC3BC;
   --deep-ink:    #0E1615;
+  --p0-bg: #16281F; --p0-fg: #74C39A;
+  --p1-bg: #2E2513; --p1-fg: #D9A84E;
+  --p2-bg: #351F16; --p2-fg: #F0906A;
+  --p3-bg: #351616; --p3-fg: #E57373;
   --good:        #74C39A;
   --good-wash:   #16281F;
 }
@@ -289,7 +301,7 @@ h2 {
 .courses { padding: 14px 0; display: flex; flex-direction: column; }
 .course {
   display: grid;
-  grid-template-columns: 148px 1fr auto auto;
+  grid-template-columns: 40px 148px 1fr auto auto;
   gap: 14px;
   align-items: baseline;
   padding: 6px 20px;
@@ -320,6 +332,25 @@ h2 {
   text-align: right;
   min-width: 18px;
 }
+
+
+/* ---------- priority chips ---------- */
+.prio {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-align: center;
+  padding: 2px 0;
+  min-width: 34px;
+  align-self: center;
+  white-space: nowrap;
+}
+.prio.p0 { background: var(--p0-bg); color: var(--p0-fg); }
+.prio.p1 { background: var(--p1-bg); color: var(--p1-fg); }
+.prio.p2 { background: var(--p2-bg); color: var(--p2-fg); }
+.prio.p3 { background: var(--p3-bg); color: var(--p3-fg); }
+.sec-lede .prio { display: inline-block; padding: 1px 6px; min-width: 0; }
 
 /* ---------- milestone band ---------- */
 
@@ -465,7 +496,7 @@ footer {
   body { padding: 0 16px 64px; font-size: 16px; }
   .term { grid-template-columns: 1fr; }
   .term-rail { border-right: none; border-bottom: 1px solid var(--line); flex-direction: row; align-items: baseline; flex-wrap: wrap; gap: 12px; }
-  .course { grid-template-columns: 1fr auto; gap: 4px 12px; }
+  .course { grid-template-columns: 40px 1fr auto; gap: 4px 12px; }
   .course .title-is { grid-column: 1 / -1; }
   .meta { text-align: left; grid-column: 1 / -1; }
   .load-row { grid-template-columns: 96px 1fr 48px; }

@@ -36,8 +36,10 @@
 
   /* ---------- rendering ---------- */
 
-  const courseRow = ([code, title, meta, warn, ein, add]) => `
+  const PRIO = { 0: '0', 1: '+1', 2: '+2', 3: '+3+' };
+  const courseRow = ([code, title, meta, warn, ein, add, cost]) => `
     <div class="course${add ? ' add' : ''}">
+      ${cost !== undefined ? `<span class="prio p${cost}">${PRIO[cost]}</span>` : ''}
       <span class="code">${esc(code)}</span>
       <span class="title-is">${esc(title)}</span>
       <span class="meta${warn ? ' warn' : ''}">${esc(meta)}</span>
@@ -98,6 +100,7 @@
 
       <section>
         <h2>Term by term</h2>
+        ${d.spineNote ? `<p class="sec-lede">${d.spineNote}</p>` : ''}
         <div class="spine">${d.spine
           .map((s) => (s.type === 'term' ? term(s) : milestone(s))).join('')}</div>
       </section>
